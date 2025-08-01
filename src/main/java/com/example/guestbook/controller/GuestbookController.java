@@ -2,6 +2,7 @@ package com.example.guestbook.controller;
 
 import com.example.guestbook.domain.Guestbook;
 import com.example.guestbook.dto.GuestbookRequestDto;
+import com.example.guestbook.dto.GuestbookResponseDto;
 import com.example.guestbook.repository.GuestbookRepository;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +20,19 @@ public class GuestbookController {
     }
 
     @GetMapping
-    public List<Guestbook> getAll(){
-        return guestbookRepository.findAll();
+    public List<GuestbookResponseDto> getAll(){
+        return guestbookRepository.findAll().stream()
+                .map(g->new GuestbookResponseDto(g.getId(),g.getName(),g.getMessage())).toList();
     }
 
     @PostMapping
-    public Guestbook create(@Valid @RequestBody GuestbookRequestDto requestDto){
+    public GuestbookResponseDto create(@Valid @RequestBody GuestbookRequestDto requestDto){
         Guestbook guestbook = new Guestbook();
         guestbook.setName(requestDto.getName());
         guestbook.setMessage(requestDto.getMessage());
-        return guestbookRepository.save(guestbook);
+        Guestbook saved = guestbookRepository.save(guestbook);
+
+        return new GuestbookResponseDto(saved.getId(),saved.getName(),saved.getMessage());
     }
 
     @DeleteMapping("/{id}")
