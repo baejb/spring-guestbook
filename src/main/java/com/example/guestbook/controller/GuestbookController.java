@@ -2,6 +2,7 @@ package com.example.guestbook.controller;
 
 import com.example.guestbook.domain.Guestbook;
 import com.example.guestbook.repository.GuestbookRepository;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class GuestbookController {
     }
 
     @PostMapping
-    public Guestbook create(@RequestBody Guestbook guestbook){
+    public Guestbook create(@Valid @RequestBody Guestbook guestbook){
         return guestbookRepository.save(guestbook);
     }
 
