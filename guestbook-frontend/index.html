@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>방명록</title>
+</head>
+<body>
+<h1>방명록 작성</h1>
+<form id="guestbook-form">
+    <input type="text" id="name" placeholder="이름" required />
+    <br />
+    <textarea id="message" placeholder="메시지" required></textarea>
+    <br />
+    <button type="submit">작성</button>
+</form>
+
+<script>
+    document.getElementById("guestbook-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const message = document.getElementById("message").value;
+
+      const response = await fetch("http://localhost:8080/guestbooks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, message }),
+      });
+
+      const result = await response.json();
+      console.log("응답:", result);
+      alert("작성 완료!");
+    });
+</script>
+</body>
+</html>
